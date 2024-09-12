@@ -55,8 +55,74 @@ There two import governance tools:
 * Azure policies
 * Resource tags
 
-Azure provides a hierarchical structure to apply governance strategies as shown below:
+#### Recommend a strategy for resource tegging
 
+Tags logically organize the resources. They consist of a name-value pair and help retrieve related resources from different resource groups. Resource tagging is helpful when users need to organize resources for billing.
+
+Limitations of tags:
+
+* Each resource or resource group can have a maximum of 50 tag name-value pairs.
+* The tag name has a limit of 512 characters, and the tag value has a limit of 256 characters.
+* For storage accounts, the tag name is limited to 128 characters and value to 256 characters.
+* Not all resource types support tags.
+* Tag applied to resource groups are not inherited by the resources in that resource group.
+* Tags can be enforced with the help of policy.
+
+Enforcing tags with policy:
+
+| Policy                                                               | Description                                                                                           |
+|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| Apply tag and its default value                                      | * Appends a specified tag name and value, if that tag is not provided <br/> * Specify the tag name and value to apply                                                                                                                                                                                                     |
+| Billing tags policy initiative                                       | * Requires specified tag values for cost center and product name <br /> * Uses built in policies to apply and enforce required tags <br /> * Specify the required values for the tags                                                                                                                                     |
+| Enforce tag and its value                                            | * Requires a specified tag name and value <br /> * Specify the tag name and value to enforce          |
+| Enforce tag name and its value on resource groups                    | * Requires a specified tag name and value on a resource group <br /> * Specify the required tag name and value                                                                                                                                                                                                            |
+#### Recommend a solution for using Azure policy
+
+Azure policy helps enforce organizational standards and asses compliance at scale.
+
+* The compliance dashboard offers a consodilated view to asses the environment's overall status, allowing detailed analysis at the resource and policy levels.
+* It includes implementing governance for resource consistency, regulatory compliance, security, cost, and management.
+
+Example: Users can create only a certain SKU size of virtual machines in your environment.
+
+Bebefits of Azure policies:
+
+* Enforcement and compliance: Turn on policies for resources and get real-time policy evaluation and enforcement.
+* Apply policies at scale: Apply multiple policies and aggregate policiy states with the policy initiative.
+* Remediation: It provides real-time remediation.
+
+Steps to implement Azure policies:
+
+* Browse policy definitions
+  * A policy definition defines under what condition a policy is enforced and what effect to take.
+  * Example: Users could prevent VMs from being deployed if they are exposed to a public IP address.
+  * Users can import policies from GitHub.
+  * Policy definitions have a specific JSON format.
+* Create initiative definitions
+  * Group policy definitions.
+  * Include one or more policies.
+  * Manage planning.
+* Scope the initiative definition
+  * The scope determines what resources or group of resources the policy is enforced on.
+  * Assign the definition to a scope.
+  * Select the subscription and optionally the resource group.
+  * An initiative definition can have up to 100 policies.
+* View policy evaluation results
+  * Determine compliance
+    * Non-compliant initiatives
+      * Non-compliant policies: It is the number of policy assignments with at least one non-compliat resource.
+      * Non-compliant resources: Once a condition is evaluated against the existing resources and found to be true, the resources are marked as non-compliant with the policy.
+  * Policy effects
+    * The policy creates a list of all assignments that apply to the resource and then evaluates the resource.
+    * Azure policy evaluates the requests to create or update a resource through the Azure resource manager.
+    * Policy processes several of the effects before handling the request to the appropriate resource provider to avoid violating policy.
+      * Deny: The resource creation / updation fails due to policy.
+      * Disabled: The policy rule is ignored (Disabled), often used for testing.
+      * Append: Adds additional parameters / fields to the requested resource during cration or updation. A common example is adding tags on resources such as Cost Center or specifying allowed IPs for a storage resource.
+      * Audit, AuditIfNotExists: Creates a warning event in the activity log when evaluating a non-compliant resource, but it doesn't stop the request.
+      * DeployIfNotExists: Executes a template deployment when the condition is met. Example: Evaluates SQL Server databases to determine whether transparentDataEncryption is enabled. If not, then a deployment to enable is executed.
+
+Azure provides a hierarchical structure to apply governance strategies as shown below:
 
 ![Azure governance scope levels](https://github.com/sunnyadeshara86/microsoft-azure/blob/master/Images/scope-levels.png)
 
@@ -158,3 +224,37 @@ Resource group organization can be done in following ways:
 * For authorization: Since resource groups fall under the scope of RBAC, users can organize resources by who wants to manage them.
 * For lifecycle: Deleting a resource group deletes both the group and its contents, making it suitable for disposable resources in production environments.
 * For billing: When a user places a resource in a particular resource group, it allows them to be grouped for billing reports.
+
+## Design for Azure RBAC
+
+It is a fundamental Azure service that enables fine-grained access control for Azure resources. It follows the principle of granting permissions based on roles, ensuring the reight people have the right access.
+
+Designing effective RBAC in Azure:
+
+* Identify roles
+* Define scope
+* Assign roles
+
+Benefits of RBAC:
+
+* Improved security: Only authorized individuals can carry out specific actions on Azure resources, minimizing the risk of security breaches.
+* Granular control: It enablesdetailed management of permissions, advocating a least privilege access model.
+* Compliance: It helps in meeting regulatory requirements by providing access controls and audit trails.
+* Efficiency: It streamlines resource management by delegating responsibilities to the right roles.
+
+RBAC Use Cases:
+
+* Project-Based Access: Assign roles based on project teams, limiting access to relevant resources.
+* Compliance and Audit: Implement RBAC for compliance requirements and auditing needs.
+* Resource Group Level Control: Use RBAC to control access at the resource group level for a more organized approach.
+* External Collaborators: Grant restricted access to external collaborators by using custom roles.
+
+RBAC Best practices:
+
+* Regular Review: Periodically review and update RBAC assignments to align with changing roles and responsibilities.
+* Custom Roles: Create custom roles when predefined Azure roles don't match with organization's requirements.
+* Role Segregation: Avoid over-assigning broad permissions. Segregate duties by assigning minimal necessary permissions.
+
+Combining Azure Policy and RBAC:
+
+![Combining Azure RBAC and Azure Policy](https://github.com/sunnyadeshara86/microsoft-azure/blob/master/Images/rbac-azure-policy.jpeg)
