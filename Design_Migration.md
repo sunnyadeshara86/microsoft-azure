@@ -67,8 +67,7 @@ Deployment Tasks Comparison: Agentless vs. Agent-Based:
 | Add the server migration tool                   | Add the Azure Migrate Server Migration tool tothe Azure Migrate project        | Required           | Required             |
 | Deploy the Azure Migrate appliance              | Set up a lightweight appliance on a VMware VM for VM discovery and assessment  | Required           | Not-required         |
 | Install the mobility service on VMs             | Install the mobility service on each VM the user wants to replicate            | Not-required       | Required             |
-| Deploy the Azure Migrate Server                 | Set up an appliance on a VMware VM to discover VMs, and bridge between the 
-                                                    mobility service running on VMs and Azure Migrate Server Migration             | Not-required       | Required             |
+| Deploy the Azure Migrate Server                 | Set up an appliance on a VMware VM to discover VMs, and bridge between the mobility service running on VMs and Azure Migrate Server Migration             | Not-required       | Required             |
 | Enable VM replication                           | Configure replication settings and select VMs to replicate                     | Required           | Required             |
 | Run a test migration                            | Run a test migration to make sure everything is working as expected            | Required           | Required             |
 | Run a full migration                            | Migrate the VMs                                                                | Required           | Required             |
